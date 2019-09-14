@@ -46,7 +46,7 @@ class Town < ApplicationRecord
     def self.get_operation(params)
         operation = ''
         case params["predicate"]
-          when nil || "equal"
+          when nil, "equal"
             operation = "= #{params['value']}"
           when  "gt" 
             operation = "> #{params['value']}"
