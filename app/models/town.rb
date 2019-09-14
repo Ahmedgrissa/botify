@@ -21,4 +21,41 @@ class Town < ApplicationRecord
         return @towns
     end
 
+    def self.convert_json_to_query(conversion_params)
+        fields_string = conversion_params['fields'].join(',')
+        query = "SELECT #{fields_string} FROM towns "
+        if conversion_params["filters"].present?
+            filter = get_filter(conversion_params["filters"])
+            if filter 
+                query += "WHERE #{filter}"
+            end
+        end
+        return query
+    end
+
+    def self.get_filter(filters)
+        field = filters["field"]
+        operation = get_operation(filters)
+        # si predicate n'est pas dans la liste on ignore le filtre et on affiche la reqûete
+        if operation.present?
+            filters = "#{field} #{operation}"
+            return filters
+        end
+    end
+
+    def self.get_operation(params)
+        operation = ''
+        case params["predicate"]
+          when "equal"
+            operation = "= #{params['value']}"
+          when  "gt" 
+            operation = "> #{params['value']}"
+          when  "lt" 
+            operation = "< #{params['value']}"
+          when  "contains" 
+            operation = "LIKE '%#{params['value']}%'"
+        end
+        return operation
+    end
+
 end

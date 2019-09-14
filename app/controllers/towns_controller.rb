@@ -12,6 +12,10 @@ class TownsController < ApplicationController
         render json: {message: "sorry bro"}
       end
     end
+
+    def convert
+      render json: { "query": Town.convert_json_to_query(conversion_params) }
+    end
   
     private
   
@@ -21,6 +25,10 @@ class TownsController < ApplicationController
 
       def aggregation_params
         params.permit(:dept_code, :region_code)
+      end
+
+      def conversion_params
+        params
       end
 end
   
