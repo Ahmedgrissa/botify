@@ -47,7 +47,11 @@ class Town < ApplicationRecord
         operation = ''
         case params["predicate"]
           when nil, "equal"
+            if [:integer,:float].include?(Town.columns_hash[params["field"]].type)
             operation = "= #{params['value']}"
+            elsif Town.columns_hash[params["field"]].type == :string
+                operation = "= '#{params['value']}'"
+            end
           when  "gt" 
             operation = "> #{params['value']}"
           when  "lt" 
