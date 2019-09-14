@@ -8,7 +8,7 @@ class TownsController < ApplicationController
     private
   
       def town_params
-        params.permit(:page_size, :page_number)
+        params.permit(:page_size, :page_number, :order_by, :filter)
       end
 end
   
