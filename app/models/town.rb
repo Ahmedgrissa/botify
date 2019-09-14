@@ -38,11 +38,12 @@ class Town < ApplicationRecord
             operator = filters.keys.first
             number_of_conditions = filters[operator].count
             first_filter = get_filters(filters[operator][0])
-            final_filter = " #{first_filter} "
+            final_filter = " (#{first_filter} "
             2.upto(number_of_conditions) do |i|
                 filter = get_filters(filters[operator][i-1])
                 final_filter += " #{operator.upcase} #{filter}"
             end
+            final_filter += ")"
             return final_filter
         else
             return get_filter(filters)
