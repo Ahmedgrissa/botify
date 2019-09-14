@@ -26,13 +26,27 @@ class Town < ApplicationRecord
         raise_error_if_attributes_are_unavailabe(conversion_params)
         fields_string = conversion_params['fields'].join(',')
         query = "SELECT #{fields_string} FROM towns "
-        if conversion_params["filters"].present?
-            filter = get_filter(conversion_params["filters"])
-            if filter 
-                query += "WHERE #{filter}"
-            end
+        all_filters = get_filters(conversion_params['filters'])
+        if all_filters
+            query += "WHERE #{all_filters}"
         end
-        return query
+    end
+
+    def self.get_filters(filters)
+        query_keys = ["and", "or"]
+        if !(filters.keys & query_keys).empty?
+            operator = filters.keys.first
+            number_of_conditions = filters[operator].count
+            first_filter = get_filters(filters[operator][0])
+            final_filter = " #{first_filter} "
+            2.upto(number_of_conditions) do |i|
+                filter = get_filters(filters[operator][i-1])
+                final_filter += " #{operator.upcase} #{filter}"
+            end
+            return final_filter
+        else
+            return get_filter(filters)
+        end
     end
 
     def self.get_filter(filters)
