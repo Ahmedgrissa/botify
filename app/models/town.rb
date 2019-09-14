@@ -37,6 +37,7 @@ class Town < ApplicationRecord
 
     def self.get_filter(filters)
         field = filters["field"]
+        raise_error_if_types_not_copmatible(field, filters["value"])
         operation = get_operation(filters)
         # si predicate n'est pas dans la liste on ignore le filtre et on affiche la reqûete
         if operation.present?
@@ -50,7 +51,7 @@ class Town < ApplicationRecord
         case params["predicate"]
           when nil, "equal"
             if [:integer,:float].include?(Town.columns_hash[params["field"]].type)
-            operation = "= #{params['value']}"
+                operation = "= #{params['value']}"
             elsif Town.columns_hash[params["field"]].type == :string
                 operation = "= '#{params['value']}'"
             end
@@ -77,4 +78,11 @@ class Town < ApplicationRecord
         end
     end
 
+    def self.raise_error_if_types_not_copmatible(field, value)
+        attribute_type = Town.columns_hash[field].type
+        value_type = value.class.name.underscore.to_sym
+        if value_type != attribute_type && [value_type, attribute_type].sort != [:integer, :float].sort 
+            raise "Types Don't Match"
+        end
+    end
 end
