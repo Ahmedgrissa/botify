@@ -23,6 +23,7 @@ class Town < ApplicationRecord
 
     def self.convert_json_to_query(conversion_params)
         raise_error_if_no_fields(conversion_params)
+        raise_error_if_attributes_are_unavailabe(conversion_params)
         fields_string = conversion_params['fields'].join(',')
         query = "SELECT #{fields_string} FROM towns "
         if conversion_params["filters"].present?
@@ -68,4 +69,12 @@ class Town < ApplicationRecord
             raise "No Fields"
         end
     end
+
+    def self.raise_error_if_attributes_are_unavailabe(conversion_params)
+        are_attributes_unavailable = (conversion_params["fields"] - Town.new.attributes.keys).present?
+        if are_attributes_unavailable
+            raise "Some Fields Are Unavailable"
+        end
+    end
+
 end
