@@ -13,4 +13,12 @@ class Town < ApplicationRecord
         return @towns
     end
 
+    def self.aggregate(params)
+        query = "SELECT count(*) AS towns_number, MIN(population) AS min, MAX(population) AS max, AVG(population) AS average
+                 FROM towns
+                 WHERE #{params.keys[0]} = #{params.values[0]}"
+        @towns = ActiveRecord::Base.connection.execute(query)
+        return @towns
+    end
+
 end
