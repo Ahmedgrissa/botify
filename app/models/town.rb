@@ -22,6 +22,7 @@ class Town < ApplicationRecord
     end
 
     def self.convert_json_to_query(conversion_params)
+        raise_error_if_no_fields(conversion_params)
         fields_string = conversion_params['fields'].join(',')
         query = "SELECT #{fields_string} FROM towns "
         if conversion_params["filters"].present?
@@ -62,4 +63,9 @@ class Town < ApplicationRecord
         return operation
     end
 
+    def self.raise_error_if_no_fields(conversion_params)
+        if conversion_params["fields"].nil? 
+            raise "No Fields"
+        end
+    end
 end
