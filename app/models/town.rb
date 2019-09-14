@@ -82,7 +82,7 @@ class Town < ApplicationRecord
         attribute_type = Town.columns_hash[field].type
         value_type = value.class.name.underscore.to_sym
         if value_type != attribute_type && [value_type, attribute_type].sort != [:integer, :float].sort 
-            raise "Types Don't Match"
+            raise "Types Are Incompatible"
         end
     end
 end
