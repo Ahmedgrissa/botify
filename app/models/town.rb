@@ -4,11 +4,11 @@ class Town < ApplicationRecord
         @towns = []
         @order_by = nil
         if  params["page_size"] && params["page_number"] || params["filter"]
-        @order_by = params["order_by"] if params["order_by"]
-        @where_filters = params["filter"] if params["filter"]
-        @towns = Town.where(@where_filters).page(params['page_number']).per(params['page_size']).order(@order_by)
+            @order_by = params["order_by"] if params["order_by"]
+            @where_filters = params["filter"] if params["filter"]
+            @towns = Town.where(@where_filters).page(params['page_number']).per(params['page_size']).order(@order_by)
         else 
-        @towns = Town.all
+            @towns = Town.all
         end
         return @towns
     end
@@ -35,6 +35,8 @@ class Town < ApplicationRecord
     def self.get_filters(filters)
         query_keys = ["and", "or"]
         if !(filters.keys & query_keys).empty?
+            p filters.keys
+            p 'filters.keys______________'
             operator = filters.keys.first
             number_of_conditions = filters[operator].count
             first_filter = get_filters(filters[operator][0])

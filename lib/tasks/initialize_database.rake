@@ -47,7 +47,7 @@ namespace :import_towns_from_file do
 			towns << town
 		end
 		p 'creating___'
-		Town.create(towns)
+		Town.import(towns)
 
 	end
 

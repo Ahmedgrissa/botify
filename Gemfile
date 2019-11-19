@@ -55,3 +55,5 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 #gem for pagination
 gem 'kaminari'
+
+gem 'activerecord-import'
